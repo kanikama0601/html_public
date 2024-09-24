@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport"  content="width=device-width,initial-scale=1.0">
+        <title>最終レポート サンプル beta3 デザイン1</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+
+    <body class="background-image"><!--body class="background-image"-->
+        <div id="content">
+            <h1>天気予報アプリ</h1>
+            <form id="weather-form">
+                <input type="text" id="areacode-input" placeholder="地域コード" value="130000" required>
+                <button type="submit" value="天気を確認">確認</button>
+            </form>
+    
+            <div id="weather-info"></div>
+            <div id="after-weather" class="center-text" style="background-color: rgba(0, 0, 0, 0.5); padding: 3px 40px; border-radius: 30px;"></div>
+        </div>
+
+        <script src="script.js"></script>
+
+        <!--以下色設定用-->
+        <!-- <p style="color:rgb(107, 129, 254);" class="inline">アンパンマングミRTA</p> -->
+
+
+        <!-- 読み込んだときは枠を表示させない -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var afterWeatherDiv = document.getElementById("after-weather");
+                if (afterWeatherDiv.innerHTML.trim() === "") {
+                    afterWeatherDiv.style.display = "none";
+                }
+            });
+        </script>
+    </body>
+</html>
