@@ -132,6 +132,58 @@ const weather_codes = {
     '450': '雪で雷を伴う',
 }
 
+// 地域コードの辞書
+const areaCodeDict = {
+    '北海道': '016000',
+    '札幌': '016000',
+    '青森': '020000',
+    '秋田': '050000',
+    '岩手': '030000',
+    '山形': '060000',
+    '宮城': '040000',
+    '福島': '070000',
+    '茨城': '080000',
+    '栃木': '090000',
+    '群馬': '100000',
+    '埼玉': '110000',
+    '千葉': '120000',
+    '東京': '130000',
+    '神奈川': '140000',
+    '新潟': '150000',
+    '富山': '160000',
+    '石川': '170000',
+    '富山': '180000',
+    '山梨': '190000',
+    '長野': '200000',
+    '岐阜': '210000',
+    '静岡': '220000',
+    '愛知': '230000',
+    '三重': '240000',
+    '滋賀': '250000',
+    '京都': '260000',
+    '大阪': '270000',
+    '兵庫': '280000',
+    '奈良': '290000',
+    '和歌山': '300000',
+    '鳥取': '310000',
+    '島根': '320000',
+    '岡山': '330000',
+    '広島': '340000',
+    '山口': '350000',
+    '徳島': '360000',
+    '香川': '370000',
+    '愛媛': '380000',
+    '高知': '390000',
+    '福岡': '400000',
+    '佐賀': '410000',
+    '長崎': '420000',
+    '熊本': '430000',
+    '大分': '440000',
+    '宮崎': '450000',
+    '鹿児島': '460100',
+    '沖縄': '471000'
+};
+
 let global_datetime
 //グローバル関数終わり
 
@@ -357,7 +409,9 @@ function displayWeatherInfo(data, data_overview,data_amedas) {
     //表示部分
 
     //背景
-    const now_time = `${global_datetime.getHours()}${global_datetime.getMinutes()}`;
+    const padTo2Digits = (num) => num.toString().padStart(2, '0');
+    now_minutes = `${padTo2Digits(global_datetime.getMinutes())}`;
+    const now_time = `${global_datetime.getHours()}${now_minutes}`;
     console.log(`now_time:${now_time}`);
     const weather_num = WeatherNum(now_time,data[0].timeSeries[0].areas[0].weatherCodes[0]);
 
@@ -436,10 +490,49 @@ function displayWeatherInfo(data, data_overview,data_amedas) {
     }
 }
 
-//リスナーの配置
-document.getElementById('weather-form').addEventListener('submit', function(e) {
+
+//サジェスト用
+const form = document.getElementById('weather-form');
+const locationSearch = document.getElementById('location-search');
+const searchSuggestions = document.getElementById('search-suggestions');
+const selectedAreaCode = document.getElementById('selected-area-code');
+
+//サジェスト用リスナー
+locationSearch.addEventListener('input', function() {
+    const searchTerm = this.value.trim();
+    searchSuggestions.innerHTML = '';
+    if (searchTerm.length > 0) {
+        const matches = Object.keys(areaCodeDict).filter(key =>
+            key.includes(searchTerm)
+        );
+        if (matches.length > 0) {
+            searchSuggestions.style.display = 'block'; // サジェストがある場合に表示
+            matches.forEach(match => {
+                const div = document.createElement('div');
+                div.textContent = match;
+                div.addEventListener('click', function() {
+                    locationSearch.value = match;
+                    selectedAreaCode.value = areaCodeDict[match];
+                    searchSuggestions.style.display = 'none'; // 選択後にサジェストを非表示
+                });
+                searchSuggestions.appendChild(div);
+            });
+        } else {
+            searchSuggestions.style.display = 'none'; // マッチがない場合は非表示
+        }
+    } else {
+        searchSuggestions.style.display = 'none'; // 入力がない場合は非表示
+    }
+});
+
+//ボタン用リスナー
+form.addEventListener('submit', function(e) {
     e.preventDefault();
     document.getElementById('after-weather').style.display = "none";
-    const areacode = document.getElementById('areacode-input').value;
-    getWeatherInfo(areacode);
+    const areaCode = selectedAreaCode.value;
+    if (areaCode) {
+        getWeatherInfo(areaCode);
+    } else {
+        alert('有効な地域を選択してください。');
+    }
 });

@@ -61,6 +61,31 @@ input, button {
     height: auto;
 }
 
+#search-suggestions {
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    max-height: 200px;
+    overflow-y: auto;
+    width: auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 1000;
+    min-width: 150px;
+    white-space: nowrap;
+}
+
+#search-suggestions div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: white;
+    white-space: nowrap;
+    color: black;
+}
+
+#search-suggestions div:hover {
+    background-color: #f0f0f0;
+}
+
 
 /* 以下アニメーション */
 
