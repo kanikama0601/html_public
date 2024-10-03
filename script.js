@@ -336,7 +336,7 @@ function WeatherNum(time,weather_code) {
         }
         else
         {
-            return 4;
+            return 2;
         }
     }
     else if(weather_code >= 300 && weather_code <= 350) //雨
